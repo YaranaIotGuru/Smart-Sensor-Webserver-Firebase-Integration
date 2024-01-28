@@ -1,0 +1,116 @@
+@property --progress-value {
+    syntax: '<integer>';
+    inherits: false;
+    initial-value: 0;
+}
+
+@keyframes humidity-progress {
+    to { --progress-value: 50; }
+}
+
+@keyframes moisture-progress {
+    to { --progress-value: 40; }
+}
+
+@keyframes smoke-progress {
+    to { --progress-value: 90; }
+}
+
+@keyframes waterLevel-progress {
+    to { --progress-value: 40; }
+}
+
+.progress-bar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+
+    /* to center the percentage value */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress-bar::before {
+    content: attr(data-value) '';
+}
+
+.humidity::before,
+.moisture::before,
+.smoke::before,
+.waterLevel::before {
+    content: attr(data-value) '';
+}
+
+
+.humidity {
+    background: radial-gradient(closest-side, #222 79%, transparent 80% 100%),
+                conic-gradient(#43f94a calc(var(--progress-value) * 1%), rgb(121, 108, 110) 0);
+    animation: humidity-progress 2s 1 forwards;
+}
+
+.humidity::before {
+    content: attr(data-value) '';
+}
+
+.moisture {
+    background: radial-gradient(closest-side, #222 79%, transparent 80% 100%, white 0),
+                conic-gradient(#2ccde9 calc(var(--progress-value) * 1%), rgb(121, 108, 110) 0);
+    animation: moisture-progress 2s 1 forwards;
+}
+
+.moisture::before {
+    content: attr(data-value) '';
+}
+
+.smoke {
+    background: radial-gradient(closest-side, #222 79%, transparent 80% 100%, white 0),
+                conic-gradient(hotpink calc(var(--progress-value) * 1%), rgb(121, 108, 110) 0);
+    animation: smoke-progress 2s 1 forwards;
+}
+
+.smoke::before {
+    content: attr(data-value) '';
+}
+
+.waterLevel {
+    background: radial-gradient(closest-side, #222 79%, transparent 80% 100%, white 0),
+                conic-gradient(#ffe047 calc(var(--progress-value) * 1%), rgb(121, 108, 110) 0);
+    animation: waterLevel-progress 2s 1 forwards;
+}
+
+.waterLevel::before {
+    content: attr(data-value) '';
+}
+
+
+
+body {
+    font-family: -apple-system, system-ui, Helvetica, Arial, sans-serif;
+    margin: 30px auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 600px;
+    background: #222;
+}
+
+h1{
+    text-align: center;
+    color: white;
+}
+
+h2 {
+    text-align: center;
+    color: white;
+}
+
+progress {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+span{
+    color: white;
+}
