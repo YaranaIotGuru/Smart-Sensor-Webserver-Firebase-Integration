@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realtime Monitor</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+</head>
+<body>
+
+    <h1>Real-time Monitor DHT & UltraSonic Sensor </h1>
+
+    <div class="progress-bar-container" id="humidity">
+        <h2>
+            <label for="humidity">Humidity</label>
+        </h2>
+        <div class="progress-bar humidity">
+            <progress id="humidity" min="0" max="100" value="0"></progress>
+            <span class="value-humidity">0%</span>
+        </div>
+    </div>
+    
+    <div class="progress-bar-container" id="temperature">
+        <h2>
+            <label for="moisture">Temperature</label>
+        </h2>
+        <div class="progress-bar moisture">
+            <progress id="temperature" min="0" max="100" value="0"></progress>
+            <span class="value-moisture">0%</span>
+        </div>
+    </div>
+
+    <div class="progress-bar-container" id="waterLevel">
+        <h2>
+            <label for="waterLevel">Distance</label>
+        </h2>
+        <div class="progress-bar waterLevel">
+            <progress id="waterLevel" min="0" max="100" value="0"></progress>
+            <span class="value-waterLevel">0%</span>
+        </div>
+    </div>
+
+<div class="youtube-subscriber" style="margin-top: 100px;">
+    <div  class="g-ytsubscribe" data-channelid="UColOAMvdtSuwGFHAIF3cnnQ" data-layout="full" data-theme="dark" data-count="default"></div>
+
+</div>
+
+   
+    <script src="https://apis.google.com/js/platform.js"></script>
+
+   
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyAdD0OqUE8lO2JBjaHVE4OUdPZu9n2kO-s",
+           authDomain: "androidstatus-8ebf1.firebaseapp.com",
+           databaseURL: "https://androidstatus-8ebf1.firebaseio.com",
+           projectId: "androidstatus-8ebf1",
+           storageBucket: "androidstatus-8ebf1.appspot.com",
+             messagingSenderId: "740926369629",
+           appId: "1:740926369629:web:74defec22f930d651702b4"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Reference to the Firebase database
+        var firebaseRef = firebase.database().ref("values");
+
+        // Update progress percentages
+        function updateProgress() {
+            // Listen for changes in the data
+            firebaseRef.on('value', function (snapshot) {
+                var data = snapshot.val();
+                updateProgressBars(data);
+            });
+        }
+
+        // Call the updateProgress function
+        updateProgress();
+
+        function updateProgressBars(data) {
+    // Iterate through each progress bar and set the value
+    for (let key in data) {
+        var progressBar = document.getElementById(key);
+        if (progressBar) {
+            progressBar.value = data[key];
+
+            // Update the data-value attribute
+            var valueDisplay = progressBar.querySelector(".value-humidity");
+            var valueDisplaym = progressBar.querySelector(".value-moisture");
+            var valueDisplaw = progressBar.querySelector(".value-waterLevel");
+
+        if (valueDisplaym) {
+         valueDisplaym.textContent = data[key] + "°C";
+       }
+            if (valueDisplay) {
+                valueDisplay.textContent = data[key] + "%";
+              
+            }
+            if (valueDisplaw) {
+                valueDisplaw.textContent = data[key] + "cm"; 
+            }            
+            // Dynamically set keyframe values
+            setKeyframeValues(key, data[key]);
+        }
+    }
+}
+        // Function to dynamically set keyframe values
+        function setKeyframeValues(key, value) {
+            var styleSheet = document.styleSheets[0];
+            var keyframeName = key + "-progress";
+
+            // Check if the keyframe already exists, and remove it
+            for (var i = 0; i < styleSheet.cssRules.length; i++) {
+                if (styleSheet.cssRules[i].name === keyframeName) {
+                    styleSheet.deleteRule(i);
+                    break;
+                }
+            }
+
+            // Dynamically inject the updated keyframe
+            var keyframeValue = `to { --progress-value: ${value}; }`;
+            var keyframeRule = `@keyframes ${keyframeName} { ${keyframeValue} }`;
+            styleSheet.insertRule(keyframeRule, styleSheet.cssRules.length);
+        }
+    </script>
+</body>
+</html>
